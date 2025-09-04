@@ -30,10 +30,18 @@ Ensure your deployment platform runs:
 
 ## Environment Variables Required
 - `NODE_ENV=production`
-- `MONGO_URI` - Your MongoDB connection string
-- `JWT_SECRET` - Your JWT secret key
+- `MONGO_URI=mongodb+srv://saikrishnabalaka_db_user:Saikrishn%407@cluster0.uqyesid.mongodb.net/MY-API-PLAYGROUND?retryWrites=true&w=majority`
+- `JWT_SECRET=MY-API-PLAYGROUND-super-secret-jwt-key-2024-development`
 - `CLIENT_URL` - Your frontend URL for CORS
 - `PORT` - Will be set automatically by most platforms
+
+## MongoDB Atlas IP Whitelist Issue
+If you see "MongooseServerSelectionError: Could not connect to any servers", your deployment server's IP isn't whitelisted:
+
+1. Go to MongoDB Atlas Dashboard → Network Access
+2. Click "Add IP Address" 
+3. Select "Allow Access from Anywhere" (0.0.0.0/0) for development
+4. Or add specific Render.com IPs: 216.24.57.1/32, 216.24.57.4/32, 216.24.57.5/32
 
 ## Files Added/Modified
 - ✅ Fixed missing `path` import in `server.js`
