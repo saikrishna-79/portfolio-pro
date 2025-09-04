@@ -17,8 +17,7 @@ app.use(helmet({
 }));
 app.use(cors({
   origin: [
-    process.env.CLIENT_URL || 'http://localhost:3000',
-    'https://portfolio-pro-y6qq.onrender.com'
+    process.env.CLIENT_URL || 'http://localhost:3000'
   ],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
@@ -80,7 +79,10 @@ app.use('*', (req, res) => {
 });
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`MY-API-PLAYGROUND server running on port ${PORT}`);
+const HOST = process.env.HOST || '0.0.0.0';
+
+app.listen(PORT, HOST, () => {
+  console.log(`MY-API-PLAYGROUND server running on http://${HOST}:${PORT}`);
+  console.log(`Local network access: http://localhost:${PORT}`);
   console.log(`Environment: ${process.env.NODE_ENV}`);
 });
