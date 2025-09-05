@@ -45,17 +45,21 @@ const Dashboard = () => {
         })
       ]);
 
+      // Defensive checks for undefined data
       setStats({
-        skills: skillsRes.data.data.count,
-        projects: projectsRes.data.data.pagination.totalCount,
-        work: workRes.data.data.count,
-        links: linksRes.data.data.count
+        skills: skillsRes?.data?.data?.count ?? 0,
+        projects: projectsRes?.data?.data?.pagination?.totalCount ?? 0,
+        work: workRes?.data?.data?.count ?? 0,
+        links: linksRes?.data?.data?.count ?? 0
       });
 
-      setTopSkills(topSkillsRes.data.data.skills);
-      setRecentProjects(projectsRes.data.data.projects);
+      setTopSkills(topSkillsRes?.data?.data?.skills ?? []);
+      setRecentProjects(projectsRes?.data?.data?.projects ?? []);
     } catch (error) {
       console.error('Error fetching dashboard data:', error);
+      setStats({ skills: 0, projects: 0, work: 0, links: 0 });
+      setTopSkills([]);
+      setRecentProjects([]);
     } finally {
       setLoading(false);
     }
