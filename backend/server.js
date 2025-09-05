@@ -17,11 +17,7 @@ app.use(helmet({
 }));
 
 // CORS (allow everywhere for now)
-app.use(cors({
-  origin: "*",
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"]
-}));
+app.use(cors());
 
 // Rate limiting
 const limiter = rateLimit({
