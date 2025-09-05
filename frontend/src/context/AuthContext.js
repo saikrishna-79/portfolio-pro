@@ -19,7 +19,7 @@ export const AuthProvider = ({ children }) => {
   // Set up axios defaults
   useEffect(() => {
     // Set base URL for axios
-    axios.defaults.baseURL = 'https://portfolio-pro-backend.onrender.com';
+    axios.defaults.baseURL = 'https://portfolio-pro-xv3x.onrender.com';
     
     if (token) {
       axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
