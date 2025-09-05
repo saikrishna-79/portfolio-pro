@@ -24,8 +24,6 @@ const Dashboard = () => {
   }, []);
 
   const fetchDashboardData = async () => {
-  // Debug: Log the token used for dashboard requests
-  console.log('Token used for dashboard requests:', localStorage.getItem('token'));
     try {
       const [skillsRes, projectsRes, workRes, linksRes, topSkillsRes] = await Promise.all([
         axios.get('/api/skills', {
