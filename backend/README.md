@@ -47,9 +47,8 @@ npm install
 
 3. **Install frontend dependencies**
 ```bash
-cd client
+cd frontend
 npm install
-cd ..
 ```
 
 4. **Environment Configuration**
@@ -83,7 +82,7 @@ npm run dev
 
 Frontend server (in a new terminal):
 ```bash
-npm run client
+npm run start
 ```
 
 The application will be available at:
