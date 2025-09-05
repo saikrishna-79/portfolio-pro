@@ -23,7 +23,10 @@ const Profile = () => {
 
   const fetchProfile = async () => {
     try {
-      const response = await axios.get('/api/profile');
+      const token = localStorage.getItem('token');
+      const response = await axios.get('/api/profile', {
+        headers: { Authorization: `Bearer ${token}` }
+      });
       const profileData = response.data.data.profile;
       setProfile(profileData);
       setFormData({
@@ -61,10 +64,16 @@ const Profile = () => {
     try {
       let response;
       if (profile) {
-        response = await axios.put('/api/profile', formData);
+        const token = localStorage.getItem('token');
+        response = await axios.put('/api/profile', formData, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
         setMessage('Profile updated successfully!');
       } else {
-        response = await axios.post('/api/profile', formData);
+        const token = localStorage.getItem('token');
+        response = await axios.post('/api/profile', formData, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
         setMessage('Profile created successfully!');
       }
       

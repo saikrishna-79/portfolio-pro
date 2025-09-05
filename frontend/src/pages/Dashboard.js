@@ -24,13 +24,25 @@ const Dashboard = () => {
   }, []);
 
   const fetchDashboardData = async () => {
+  // Debug: Log the token used for dashboard requests
+  console.log('Token used for dashboard requests:', localStorage.getItem('token'));
     try {
       const [skillsRes, projectsRes, workRes, linksRes, topSkillsRes] = await Promise.all([
-        axios.get('/api/skills'),
-        axios.get('/api/projects?limit=3'),
-        axios.get('/api/work'),
-        axios.get('/api/links'),
-        axios.get('/api/skills/top?limit=5')
+        axios.get('/api/skills', {
+          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+        }),
+        axios.get('/api/projects?limit=3', {
+          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+        }),
+        axios.get('/api/work', {
+          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+        }),
+        axios.get('/api/links', {
+          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+        }),
+        axios.get('/api/skills/top?limit=5', {
+          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+        })
       ]);
 
       setStats({

@@ -35,7 +35,10 @@ const Projects = () => {
       if (skillFilter) {
         url += `?skill=${encodeURIComponent(skillFilter)}`;
       }
-      const response = await axios.get(url);
+      const token = localStorage.getItem('token');
+      const response = await axios.get(url, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
       setProjects(response.data.data.projects);
     } catch (error) {
       console.error('Error fetching projects:', error);
@@ -84,10 +87,16 @@ const Projects = () => {
       };
 
       if (editingId) {
-        await axios.put(`/api/projects/${editingId}`, submitData);
+        const token = localStorage.getItem('token');
+        await axios.put(`/api/projects/${editingId}`, submitData, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
         setMessage('Project updated successfully!');
       } else {
-        await axios.post('/api/projects', submitData);
+        const token = localStorage.getItem('token');
+        await axios.post('/api/projects', submitData, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
         setMessage('Project added successfully!');
       }
       
@@ -119,7 +128,10 @@ const Projects = () => {
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this project?')) {
       try {
-        await axios.delete(`/api/projects/${id}`);
+        const token = localStorage.getItem('token');
+        await axios.delete(`/api/projects/${id}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
         setMessage('Project deleted successfully!');
         fetchProjects();
       } catch (error) {

@@ -22,6 +22,12 @@ router.post('/register', [
   body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters')
 ], async (req, res) => {
   try {
+    if (!process.env.JWT_SECRET) {
+      return res.status(500).json({
+        success: false,
+        message: 'JWT_SECRET environment variable is missing.'
+      });
+    }
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({
@@ -43,16 +49,29 @@ router.post('/register', [
     }
 
     // Create new user
-    const user = new User({
-      name,
-      email,
-      password
-    });
-
-    await user.save();
+    let user;
+    try {
+      user = new User({ name, email, password });
+      await user.save();
+    } catch (err) {
+      return res.status(400).json({
+        success: false,
+        message: 'Error saving user',
+        error: err.message
+      });
+    }
 
     // Generate token
-    const token = generateToken(user._id);
+    let token;
+    try {
+      token = generateToken(user._id);
+    } catch (err) {
+      return res.status(500).json({
+        success: false,
+        message: 'Error generating token',
+        error: err.message
+      });
+    }
 
     res.status(201).json({
       success: true,
@@ -66,7 +85,8 @@ router.post('/register', [
     console.error('Register error:', error);
     res.status(500).json({
       success: false,
-      message: 'Server error during registration'
+      message: 'Server error during registration',
+      error: error.message
     });
   }
 });

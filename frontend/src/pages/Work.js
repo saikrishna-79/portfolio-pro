@@ -29,7 +29,10 @@ const Work = () => {
 
   const fetchWork = async () => {
     try {
-      const response = await axios.get('/api/work');
+      const token = localStorage.getItem('token');
+      const response = await axios.get('/api/work', {
+        headers: { Authorization: `Bearer ${token}` }
+      });
       setWork(response.data.data.work);
     } catch (error) {
       console.error('Error fetching work:', error);
@@ -60,10 +63,16 @@ const Work = () => {
       };
 
       if (editingId) {
-        await axios.put(`/api/work/${editingId}`, submitData);
+        const token = localStorage.getItem('token');
+        await axios.put(`/api/work/${editingId}`, submitData, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
         setMessage('Work experience updated successfully!');
       } else {
-        await axios.post('/api/work', submitData);
+        const token = localStorage.getItem('token');
+        await axios.post('/api/work', submitData, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
         setMessage('Work experience added successfully!');
       }
       
@@ -96,7 +105,10 @@ const Work = () => {
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this work experience?')) {
       try {
-        await axios.delete(`/api/work/${id}`);
+        const token = localStorage.getItem('token');
+        await axios.delete(`/api/work/${id}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
         setMessage('Work experience deleted successfully!');
         fetchWork();
       } catch (error) {

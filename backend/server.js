@@ -17,7 +17,9 @@ app.use(helmet({
 }));
 
 // CORS (allow everywhere for now)
-app.use(cors());
+app.use(cors({
+  origin: "*"
+}));
 
 // Rate limiting
 const limiter = rateLimit({

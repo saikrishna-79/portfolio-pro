@@ -13,14 +13,16 @@ export const useAuth = () => {
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [token, setToken] = useState(localStorage.getItem('token'));
+  const [token, setToken] = useState(() => localStorage.getItem('token'));
   const [loading, setLoading] = useState(true);
 
   // Set up axios defaults
   useEffect(() => {
-    // Set base URL for axios
-    axios.defaults.baseURL = 'https://portfolio-pro-xv3x.onrender.com';
-    
+    // Use remote backend in production, localhost in development
+    axios.defaults.baseURL = process.env.NODE_ENV === 'production'
+      ? 'https://portfolio-pro-xv3x.onrender.com'
+      : 'http://localhost:3000';
+
     if (token) {
       axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
     } else {
@@ -36,13 +38,16 @@ export const AuthProvider = ({ children }) => {
           const response = await axios.get('/api/auth/me');
           setUser(response.data.data.user);
         } catch (error) {
-          console.error('Auth check failed:', error);
-          logout();
+          // Token invalid or expired
+          localStorage.removeItem('token');
+          setToken(null);
+          setUser(null);
         }
+      } else {
+        setUser(null);
       }
       setLoading(false);
     };
-
     checkAuth();
   }, [token]);
 
@@ -52,16 +57,20 @@ export const AuthProvider = ({ children }) => {
         email,
         password
       });
-
       const { user, token } = response.data.data;
-      
-      localStorage.setItem('token', token);
-      setToken(token);
-      setUser(user);
-      
-      return { success: true };
+      if (token) {
+        localStorage.setItem('token', token);
+        setToken(token);
+        setUser(user);
+        return { success: true };
+      } else {
+        return { success: false, message: 'No token received from server' };
+      }
     } catch (error) {
       const message = error.response?.data?.message || 'Login failed';
+      localStorage.removeItem('token');
+      setToken(null);
+      setUser(null);
       return { success: false, message };
     }
   };
@@ -73,16 +82,20 @@ export const AuthProvider = ({ children }) => {
         email,
         password
       });
-
       const { user, token } = response.data.data;
-      
-      localStorage.setItem('token', token);
-      setToken(token);
-      setUser(user);
-      
-      return { success: true };
+      if (token) {
+        localStorage.setItem('token', token);
+        setToken(token);
+        setUser(user);
+        return { success: true };
+      } else {
+        return { success: false, message: 'No token received from server' };
+      }
     } catch (error) {
       const message = error.response?.data?.message || 'Registration failed';
+      localStorage.removeItem('token');
+      setToken(null);
+      setUser(null);
       return { success: false, message };
     }
   };

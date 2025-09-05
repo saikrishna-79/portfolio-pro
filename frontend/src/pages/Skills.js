@@ -24,7 +24,10 @@ const Skills = () => {
 
   const fetchSkills = async () => {
     try {
-      const response = await axios.get('/api/skills');
+      const token = localStorage.getItem('token');
+      const response = await axios.get('/api/skills', {
+        headers: { Authorization: `Bearer ${token}` }
+      });
       setSkills(response.data.data.skills);
     } catch (error) {
       console.error('Error fetching skills:', error);
@@ -47,10 +50,16 @@ const Skills = () => {
 
     try {
       if (editingId) {
-        await axios.put(`/api/skills/${editingId}`, formData);
+        const token = localStorage.getItem('token');
+        await axios.put(`/api/skills/${editingId}`, formData, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
         setMessage('Skill updated successfully!');
       } else {
-        await axios.post('/api/skills', formData);
+        const token = localStorage.getItem('token');
+        await axios.post('/api/skills', formData, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
         setMessage('Skill added successfully!');
       }
       
@@ -77,7 +86,10 @@ const Skills = () => {
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this skill?')) {
       try {
-        await axios.delete(`/api/skills/${id}`);
+        const token = localStorage.getItem('token');
+        await axios.delete(`/api/skills/${id}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
         setMessage('Skill deleted successfully!');
         fetchSkills();
       } catch (error) {
