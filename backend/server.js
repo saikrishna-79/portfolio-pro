@@ -15,19 +15,18 @@ app.set('trust proxy', 1);
 app.use(helmet({
   crossOriginResourcePolicy: { policy: "cross-origin" }
 }));
-const cors = require("cors");
 
+// CORS (allow everywhere for now)
 app.use(cors({
-  origin: "*",  // Allow all origins
+  origin: "*",
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
 
-  
 // Rate limiting
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // limit each IP to 100 requests per windowMs
+  max: 100,
   trustProxy: true
 });
 app.use(limiter);
@@ -54,7 +53,7 @@ app.use('/api/health', require('./routes/health'));
 // Serve static files from React app in production
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static('client/build'));
-  
+
   app.get('*', (req, res) => {
     res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
   });
